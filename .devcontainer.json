@@ -1,0 +1,17 @@
+{
+    "image": "microfluidica/openfoam",
+    "features": {
+        "ghcr.io/devcontainers/features/git": {},
+        "ghcr.io/devcontainers/features/python": {},
+        "ghcr.io/devcontainers/features/docker-in-docker": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-vscode.cpptools",
+                "github.vscode-github-actions",
+                "charliermarsh.ruff"
+            ]
+        }
+    }
+}

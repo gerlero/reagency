@@ -1,0 +1,36 @@
+FoamFile
+{
+    version         2;
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          controlDict;
+}
+
+application     reagencyFoam;
+
+startFrom       latestTime;
+
+stopAt          endTime;
+
+endTime         30;
+
+deltaT          1e-3;
+
+writeControl    adjustableRunTime;
+
+writeInterval   30;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  10;
+
+writeCompression no;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable no;

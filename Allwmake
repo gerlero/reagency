@@ -1,0 +1,12 @@
+#!/bin/sh
+cd "${0%/*}" || exit 1
+targetType=libso
+. "${WM_PROJECT_DIR:?}"/wmake/scripts/AllwmakeParseArguments
+
+echo "Starting compile of reagency with ${WM_PROJECT_DIR##*/}"
+echo "  $WM_COMPILER $WM_COMPILER_TYPE compiler"
+echo "  ${WM_OPTIONS}, with ${WM_MPLIB} ${FOAM_MPI}"
+echo "  prefix = ${FOAM_MODULE_PREFIX:-default (user)}"
+
+wmake -all $targetType src $*
+wmake -all $targetType solvers $*

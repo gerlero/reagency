@@ -1,0 +1,99 @@
+# OpenFOAM
+**/lnInclude/
+**/Make/*
+!**/Make/files
+!**/Make/options
+
+# Python
+**/.venv/
+**/venv/
+**/__pycache__/
+**/.pytest_cache/
+
+# macOS
+**/.DS_Store
+
+# Tests
+/tests/*/**/0.0*/
+/tests/*/**/0.1*/
+/tests/*/**/0.2*/
+/tests/*/**/0.3*/
+/tests/*/**/0.4*/
+/tests/*/**/0.5*/
+/tests/*/**/0.6*/
+/tests/*/**/0.7*/
+/tests/*/**/0.8*/
+/tests/*/**/0.9*/
+/tests/*/**/1*/
+/tests/*/**/2*/
+/tests/*/**/3*/
+/tests/*/**/4*/
+/tests/*/**/5*/
+/tests/*/**/6*/
+/tests/*/**/7*/
+/tests/*/**/8*/
+/tests/*/**/9*/
+/tests/*/**/processor*/
+/tests/*/**/constant/polyMesh/
+/tests/*/**/dynamicCode/
+/tests/*/**/log.*
+/tests/*/**/*.foam
+/tests/*/**/*.OpenFOAM
+
+/tests/test_dispersion/0/C*
+/tests/test_exhaustible/system/controlDict
+!/tests/test_validity/*/100/theta.expected
+
+# Tutorials
+/tutorials/*/**/0.0*/
+/tutorials/*/**/0.1*/
+/tutorials/*/**/0.2*/
+/tutorials/*/**/0.3*/
+/tutorials/*/**/0.4*/
+/tutorials/*/**/0.5*/
+/tutorials/*/**/0.6*/
+/tutorials/*/**/0.7*/
+/tutorials/*/**/0.8*/
+/tutorials/*/**/0.9*/
+/tutorials/*/**/1*/
+/tutorials/*/**/2*/
+/tutorials/*/**/3*/
+/tutorials/*/**/4*/
+/tutorials/*/**/5*/
+/tutorials/*/**/6*/
+/tutorials/*/**/7*/
+/tutorials/*/**/8*/
+/tutorials/*/**/9*/
+/tutorials/*/**/processor*/
+/tutorials/*/**/constant/polyMesh/
+/tutorials/*/**/dynamicCode/
+/tutorials/*/**/log.*
+/tutorials/*/**/*.foam
+/tutorials/*/**/*.OpenFOAM
+
+!/tutorials/moistureDiffusivityTransportFoam/sequentialDelivery/**/constant/polyMesh/
+
+# VS Code
+/.vscode/*
+!/.vscode/c_cpp_properties.json
+!/.vscode/extensions.json
+!/.vscode/settings.json
+!/.vscode/tasks.json
+
+#/.vscode/
+
+# Docker
+#/Dockerfile
+#/.dockerignore
+
+# Git
+#**/.git
+#**/.gitignore
+#**/.gitattributes
+
+# GitHub
+#/.github
+
+# Dev Container
+#/.devcontainer
+#/.devcontainer.json

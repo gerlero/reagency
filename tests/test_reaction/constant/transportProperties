@@ -1,0 +1,40 @@
+FoamFile
+{
+  version     2.0;
+  format      ascii;
+  class       dictionary;
+  location    "constant";
+  object      transportProperties;
+}
+
+species
+(
+    Fe
+    SCN
+    FeSCN
+);
+
+Fe
+{
+    D diffusivity [0 2 -1 0 0 0 0 ] 1.45e-9;
+}
+
+SCN
+{
+    D diffusivity [0 2 -1 0 0 0 0 ] 1.77e-9;
+}
+
+FeSCN
+{
+    D diffusivity [0 2 -1 0 0 0 0 ] 1e-9;
+}
+
+reactions
+{
+    IronIIIThiocyanateReaction
+    {
+        reaction "Fe + SCN = FeSCN";
+        kf kf [0 3 -1 0 -1 0 0] 89e-3;
+        kr kr [0 0 -1 0 0 0 0] 0.72;
+    }
+}

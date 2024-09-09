@@ -1,0 +1,86 @@
+name: Docker
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      push:
+        description: Push the image to the registry
+        type: boolean
+        required: false
+        default: false
+
+env:
+  PUSH: ${{ inputs.push || github.event_name == 'push' }}
+  IMAGES: ${{ vars.DOCKERHUB_REPOSITORY || github.repository }}
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGES }}
+          tags: |
+            type=pep440,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+          flavor: latest=false
+      - name: Login to GitHub Container Registry
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Login to DockerHub
+        if: vars.DOCKERHUB_REPOSITORY
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64
+          push: ${{ env.PUSH }}
+      - name: Push build cache (amd64)
+        if: env.PUSH == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64,mode=max
+      - name: Push build cache (arm64)
+        if: env.PUSH == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/arm64
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64,mode=max

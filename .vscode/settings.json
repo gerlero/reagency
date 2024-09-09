@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.H": "cpp",
+        "*.C": "cpp"
+    },
+    "python.testing.cwd": "${workspaceFolder}/tests",
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false
+}

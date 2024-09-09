@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  ci:
+    name: OpenFOAM v${{ matrix.openfoam-version }}
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        openfoam-version: [2112, 2206, 2212, 2306, 2312, 2406]
+      fail-fast: false
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up OpenFOAM
+      uses: gerlero/setup-openfoam@v1
+      with:
+        openfoam-version: ${{ matrix.openfoam-version }}
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+        cache: pip
+    - name: Build
+      run: |
+        ./Allwmake -j
+    - name: Test
+      run: |
+        tests/Alltest
+
+  lint-tests:
+      name: Lint tests
+      runs-on: ubuntu-latest
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Lint with Ruff
+        uses: chartboost/ruff-action@v1
+      - name: Format with Ruff
+        uses: chartboost/ruff-action@v1
+        with:
+          args: 'format --check'
