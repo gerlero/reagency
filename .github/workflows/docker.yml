@@ -31,6 +31,14 @@ jobs:
             latest: true
           - openfoam-version: 2312
             latest: false
+          - openfoam-version: 2306
+            latest: false
+          - openfoam-version: 2212
+            latest: false
+          - openfoam-version: 2206
+            latest: false
+          - openfoam-version: 2112
+            latest: false
       fail-fast: false
     permissions:
       packages: write
