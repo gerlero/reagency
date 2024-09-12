@@ -24,6 +24,14 @@ env:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - openfoam-version: 2406
+            latest: true
+          - openfoam-version: 2312
+            latest: false
+      fail-fast: false
     permissions:
       packages: write
     steps:
@@ -37,8 +45,10 @@ jobs:
         with:
           images: ${{ env.IMAGES }}
           tags: |
-            type=pep440,pattern={{version}}
-            type=raw,value=latest,enable={{is_default_branch}}
+            type=pep440,pattern={{version}}-openfoam${{ matrix.openfoam-version }}
+            type=pep440,pattern={{version}},enable=${{ matrix.latest }}
+            type=raw,value=openfoam${{ matrix.openfoam-version }}
+            type=raw,value=latest,enable=${{ matrix.latest }}
           flavor: latest=false
       - name: Docker meta (slim)
         id: meta_slim
@@ -46,8 +56,10 @@ jobs:
         with:
           images: ${{ env.IMAGES }}
           tags: |
-            type=pep440,pattern={{version}}-slim
-            type=raw,value=slim,enable={{is_default_branch}}
+            type=pep440,pattern={{version}}-openfoam${{ matrix.openfoam-version }}-slim
+            type=pep440,pattern={{version}}-slim,enable=${{ matrix.latest }}
+            type=raw,value=openfoam${{ matrix.openfoam-version }}-slim
+            type=raw,value=slim,enable=${{ matrix.latest }}
           flavor: latest=false
       - name: Login to GitHub Container Registry
         continue-on-error: ${{ github.event_name == 'pull_request' }}
@@ -70,8 +82,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-amd64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-arm64
           push: ${{ env.PUSH }}
       - name: Build and push (slim)
         uses: docker/build-push-action@v6
@@ -81,8 +93,8 @@ jobs:
           labels: ${{ steps.meta_slim.outputs.labels }}
           target: slim
           cache-from: |
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-amd64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-arm64
           push: ${{ env.PUSH }}
       - name: Push build cache (amd64)
         if: env.PUSH == 'true'
@@ -90,17 +102,17 @@ jobs:
         with:
           platforms: linux/amd64
           cache-from: |
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-amd64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-arm64
           cache-to: |
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64,mode=max
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-amd64,mode=max
       - name: Push build cache (arm64)
         if: env.PUSH == 'true'
         uses: docker/build-push-action@v6
         with:
           platforms: linux/arm64
           cache-from: |
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-amd64
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-amd64
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-arm64
           cache-to: |
-            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-arm64,mode=max
+            type=registry,ref=ghcr.io/${{ github.repository }}:buildcache-openfoam${{ matrix.openfoam-version }}-arm64,mode=max
