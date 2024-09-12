@@ -58,7 +58,7 @@ jobs:
           tags: |
             type=pep440,pattern={{version}}-slim-openfoam${{ matrix.openfoam-version }}
             type=pep440,pattern={{version}}-slim,enable=${{ matrix.latest }}
-            type=raw,value=openfoam${{ matrix.openfoam-version }}-slim
+            type=raw,value=slim-openfoam${{ matrix.openfoam-version }}
             type=raw,value=slim,enable=${{ matrix.latest }}
           flavor: latest=false
       - name: Login to GitHub Container Registry
