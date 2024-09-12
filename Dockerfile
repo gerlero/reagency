@@ -1,6 +1,6 @@
 ARG OPENFOAM_VERSION=2406
 
-FROM microfluidica/openfoam:${OPENFOAM_VERSION}
+FROM microfluidica/openfoam:${OPENFOAM_VERSION} AS dev
 
 ARG REAGENCY_DIR=/usr/local/src/reagency
 
@@ -19,3 +19,16 @@ RUN ${REAGENCY_DIR}/Allwmake -j -prefix=group \
  && wmakeLnInclude ${REAGENCY_SRC}/reagency \
 # smoke test
  && reagencyFoam -help
+
+
+FROM microfluidica/openfoam:${OPENFOAM_VERSION}-slim AS slim
+
+ARG OPENFOAM_VERSION
+
+COPY --from=dev /usr/lib/openfoam/openfoam${OPENFOAM_VERSION}/site/ /usr/lib/openfoam/openfoam${OPENFOAM_VERSION}/site/
+
+# smoke test
+RUN reagencyFoam -help
+
+
+FROM dev
