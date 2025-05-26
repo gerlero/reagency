@@ -9,6 +9,14 @@ A simple, extensible reaction model for OpenFOAM.
 
 ## Installation
 
+### With [`styro`](https://github.com/gerlero/styro)
+
+**reagency** can be installed with the [`styro`](https://github.com/gerlero/styro) package manager:
+
+```sh
+styro install reagency
+```
+
 ### Install from source
 
 #### Requirements
