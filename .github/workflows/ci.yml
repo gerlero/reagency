@@ -15,7 +15,17 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        openfoam-version: [2112, 2206, 2212, 2306, 2312, 2406, 2412, 2506, 2512]
+        openfoam-version:
+          - 2606
+          - 2512
+          - 2506
+          - 2412
+          - 2406
+          - 2312
+          - 2306
+          - 2212
+          - 2206
+          - 2112
       fail-fast: false
     steps:
     - name: Checkout
